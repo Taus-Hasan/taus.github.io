@@ -25,8 +25,9 @@ img {
 	object-fit: cover;
 }
 p {
-	color: black;
+	color: green;
 	font-size: 1.4rem;
+    
 	margin-top: 5px;
 	line-height: 2.5rem;
 	font-weight: 300;
@@ -239,6 +240,7 @@ p {
 	animation-delay: 2s;
 }
 #hero h1:nth-child(3) {
+    color:green;
 	animation: text_reveal_name 0.5s ease forwards;
 	animation-delay: 3s;
 }
@@ -251,6 +253,7 @@ p {
 	background-color: crimson;
 	animation: text_reveal_box 1s ease;
 	animation-delay: 0.5s;
+    color:green;
 }
 #hero h1:nth-child(1) span {
 	animation-delay: 0.5s;
@@ -259,7 +262,9 @@ p {
 	animation-delay: 1.5s;
 }
 #hero h1:nth-child(3) span {
+    color:green;
 	animation-delay: 2.5s;
+    
 }
 
 /* End Hero Section */
