@@ -1,237 +1,593 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <title>Taus Hasan</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taus Hasan - Advanced 3D Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS for full-screen canvas and body styling */
+        body {
+            margin: 0;
+            overflow: hidden; /* Hide scrollbars for the entire page */
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117; /* Dark background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            color: #e6edf3; /* Light text color */
+        }
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Canvas behind overlay */
+        }
+        #info-overlay {
+            position: relative; /* Relative to body's flex container */
+            z-index: 1; /* Overlay on top of canvas */
+            background: rgba(17, 24, 39, 0.8); /* Darker, semi-transparent background */
+            padding: 2.5rem;
+            border-radius: 1.5rem; /* More rounded corners */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+            text-align: center;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: hidden; /* Changed from auto to hidden to remove scrollbar */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0; /* Initially hidden for intro animation */
+            transition: opacity 1s ease-in-out; /* Smooth fade-in */
+        }
+        #info-overlay.show {
+            opacity: 1;
+        }
+        .link-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+        }
+        .link-item:hover {
+            transform: translateY(-3px);
+            color: #60a5fa; /* Blue on hover */
+        }
+        .link-item a {
+            color: inherit; /* Inherit color from parent */
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .link-item a:hover {
+            text-decoration: underline;
+        }
+        .icon {
+            font-size: 1.25rem; /* Larger icons */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            #info-overlay {
+                padding: 1.5rem;
+                border-radius: 1rem;
+            }
+            h1 {
+                font-size: 2rem; /* Smaller heading */
+            }
+            h2 {
+                font-size: 1.25rem; /* Smaller subheading */
+            }
+            .link-item {
+                font-size: 0.9rem; /* Smaller text for links */
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <!-- Header -->
-  <section id="header">
-    <div class="header container">
-      <div class="nav-bar">
-        <div class="brand">
-          <a href="#hero">
-            <h1><span>T</span>aus <span>H</span>asan</h1>
-          </a>
-        </div>
-        <div class="nav-list">
-          <div class="hamburger">
-            <div class="bar"></div>
-          </div>
-          <ul>
-            <li><a href="#hero" data-after="Home">Home</a></li>
-            <li><a href="#services" data-after="Service">Skills</a></li>
-            <li><a href="#projects" data-after="Projects">Projects</a></li>
-            <li><a href="#about" data-after="About">About</a></li>
-            <li><a href="#contact" data-after="Contact">Contact</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- End Header -->
+    <!-- Canvas for Three.js scene -->
+    <canvas id="webgl-canvas"></canvas>
 
+    <!-- Overlay for personal information -->
+    <div id="info-overlay" class="flex flex-col items-center justify-center p-10 rounded-3xl shadow-2xl bg-gray-900 bg-opacity-80 text-white">
+        <h1 class="text-5xl md:text-6xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">Taus Hasan</h1>
+        <h2 class="text-2xl md:text-3xl font-semibold mb-8 text-gray-300">Kushtia, Khulna, Bangladesh</h2>
 
-  <!-- Hero Section  -->
-  <section id="hero">
-    <div class="hero container">
-      <div>
-        <h1>Hello, <span></span></h1>
-        <h1>This me <span></span></h1>
-        <h1>Taus Hasan <span></span></h1>
-        <a href="#about" type="button" class="cta">Portfolio</a>
-      </div>
-    </div>
-  </section>
-  <!-- End Hero Section  -->
-
-  <!-- Service Section -->
-  <section id="services">
-    <div class="services container">
-      <div class="service-top">
-        <h1 class="section-title">Sk<span>i</span>lls</h1>
-        <p>Details are given below ---</p>
-
-      </div>
-      <div class="service-bottom">
-        <div class="service-item">
-          <div class="icon"><img src="https://img.icons8.com/bubbles/100/000000/services.png" /></div>
-          <h2>HTML</h2>
-          <p>HTML (Hypertext Markup Language) is the backbone of web development, providing a structure for creating and organizing content on the internet. It uses tags to define elements and their properties.</p>
-          <progress id="file1" value="90" max="100"> 90% </progress>
-
-        </div>
-        <div class="service-item">
-          <div class="icon"><img src="https://img.icons8.com/bubbles/100/000000/services.png" /></div>
-          <h2>Python</h2>
-          <p>Python is a versatile, high-level programming language known for its readability and simplicity. Widely used in web development, data science, and automation, it emphasizes code readability and ease of use.</p>
-          <progress id="file2" value="85" max="100"> 85% </progress>
-        </div>
-        <div class="service-item">
-          <div class="icon"><img src="https://img.icons8.com/bubbles/100/000000/services.png" /></div>
-          <h2>CSS</h2>
-          <p>CSS enhances web design by styling HTML elements. It controls layout, colors, and fonts, enabling the presentation of visually appealing and responsive web pages across various devices.</p>
-          <progress id="file3" value="55" max="100"> 55% </progress>
-        </div>
-        <div class="service-item">
-          <div class="icon"><img src="https://img.icons8.com/bubbles/100/000000/services.png" /></div>
-          <h2>Javascript</h2>
-          <p>JavaScript, a dynamic scripting language, adds interactivity to HTML for web development. It runs in browsers, enabling client-side operations, and supports server-side with platforms like Node.js, enhancing versatile coding.</p>
-          <progress id="file4" value="35" max="100"> 35% </progress>
-        </div>
-        <div class="service-item">
-          <div class="icon"><img src="https://img.icons8.com/bubbles/100/000000/services.png" /></div>
-          <h2>C++</h2>
-          <p>C++, an apparent typo or misinterpretation, might refer to C#, a powerful object-oriented programming language by Microsoft. Widely used in software development, it combines simplicity and versatility for building diverse applications.</p>
-          <progress id="file5" value="35" max="100"> 35% </progress>
-        </div>
-        <div class="service-item">
-          <div class="icon"><img src="https://img.icons8.com/bubbles/100/000000/services.png" /></div>
-          <h2>C</h2>
-          <p>C is a versatile and efficient programming language. Widely used for system-level programming, it provides low-level control and has influenced many other languages. Its simplicity and performance make it enduring.</p>
-          <progress id="file6" value="50" max="100"> 50% </progress>
-        </div>
-        <div class="service-item">
-          <div class="icon"><img src="https://img.icons8.com/bubbles/100/000000/services.png" /></div>
-          <h2>Vedio Editing</h2>
-          <p>Video editing is the creative process of manipulating and arranging video footage. Using software tools, editors cut, trim, add effects, and enhance audio to craft compelling narratives and visual stories.</p>
-          <progress id="file7" value="50" max="100"> 50% </progress>
-        </div>
-        <div class="service-item">
-          <div class="icon"><img src="https://img.icons8.com/bubbles/100/000000/services.png" /></div>
-          <h2>3D Modelling</h2>
-          <p>3D modeling involves creating three-dimensional digital representations of objects or scenes. Artists and designers use specialized software to sculpt, texture, and manipulate virtual objects, enabling realistic simulations and visualizations.</p>
-          <progress id="file8" value="40" max="100"> 40% </progress>
+        <div class="space-y-4 text-lg">
+            <div class="link-item">
+                <span class="icon">▶️</span>
+                <a href="https://www.youtube.com/@codewithtaus" target="_blank" rel="noopener noreferrer">YouTube Channel</a>
+            </div>
+            <div class="link-item">
+                <span class="icon">💻</span>
+                <a href="https://github.com/Taus-Hasan" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+            </div>
+            <div class="link-item">
+                <span class="icon">📘</span>
+                <a href="https://www.facebook.com/taus.earth" target="_blank" rel="noopener noreferrer">Facebook Profile</a>
+            </div>
+            <div class="link-item">
+                <span class="icon">📸</span>
+                <a href="https://www.instagram.com/taus.earth/" target="_blank" rel="noopener noreferrer">Instagram Profile</a>
+            </div>
+            <div class="link-item">
+                <span class="icon">📧</span>
+                <a href="mailto:taushasan.earth@gmail.com">Email: taushasan.earth@gmail.com</a>
+            </div>
+            <div class="link-item">
+                <span class="icon">📱</span>
+                <a href="tel:+8801938401067">Mobile: +8801938401067</a>
+            </div>
         </div>
     </div>
-  </section>
-  <!-- End Service Section -->
 
-  <!-- Projects Section -->
-  <section id="projects">
-    <div class="projects container">
-      <div class="projects-header">
-        <h1 class="section-title">Recent <span>Projects</span></h1>
-        <p>A list is given below about our projects.</p>
-        <hr>
-      </div>
-      <div>
-         <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQFCxwMBrtgoISGIYIN2mtzxgWFtmbuAst_d_t0Rls0jLMYCbx2qAVmKfNdyj42yU3lTaP6vvKsphNE/pubhtml?widget=true&amp;headers=false" height="300px" ></iframe>
-      </div>
-      <div class="all-projects">
-        <div class="project-item">
-          <div class="project-info">
-            <h1>Youtube</h1>
-            <h2>Coding is Love</h2>
-            <p>We upload different of programing related videos. Subcribe to be with us.</p>
-            <p>Press the button below to visit Youtube channel.</p>
-            <a href="https://www.youtube.com/@codewithtaus" target="_blank" id="linko2" >VISIT</a>
-          </div>
-          <div class="project-img">
-            <img src="https://feeds.abplive.com/onecms/images/uploaded-images/2022/01/31/0dfe05d1f843d2705c096b93ccb80e54_original.jpg?impolicy=abp_cdn&imwidth=640" alt="img">
-          </div>
-        </div>
-        <div class="project-item">
-          <div class="project-info">
-            <h1>Github</h1>
-            <p>We will give the source code of different projects in our github page.</p>
-            <p>Press the button below to visit Github page.</p>
-            <a href="https://github.com/Taus-Hasan" target="_blank" id="linko" >VISIT</a>
-          </div>
-          <div class="project-img">
-            <img src="https://foundations.projectpythia.org/_images/GitHub-logo.png" alt="img">
-          </div>
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- OrbitControls for camera interaction -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- Post-processing libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <!-- IMPORTANT: LuminosityHighPassShader must be loaded before UnrealBloomPass -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
 
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- End Projects Section -->
+    <script>
+        // Global variables for Three.js scene
+        let scene, camera, renderer, controls, composer;
+        let earthSphere, cloudsSphere, particles;
+        let blastParticles = null;
+        let blastStartTime = 0;
+        let clock = new THREE.Clock();
+        let introAnimationPlaying = true;
+        const introAnimationDuration = 4;
+        const blastDuration = 1;
 
-  <!-- About Section -->
-  <section id="about">
-    <div class="about container">
-      <div class="col-left">
-        <div class="about-img">
-          <img src="./img/taus2.jpg" alt="img">
-        </div>
-      </div>
-      <div class="col-right">
-        <h1 class="section-title">About <span>me</span></h1>
-        <h2>Programmer</h2>
-        <p>Taus Hasan, a dynamic Class Ten student, is enamored with coding, envisioning a future as a skilled software engineer. Fueled by a passion for technology, Taus delves into the intricate world of programming with zeal. Eager to innovate and contribute, this aspiring developer aims to harness the power of code to create impactful solutions. With a tenacious spirit, Taus is poised to navigate the evolving landscape of software development and leave an indelible mark on the tech industry.</p>
-        <a href="mailto:taushasan.earth@gmail.com" target="_blank" class="cta">Send Mail</a>
-      </div>
-    </div>
-  </section>
-  <!-- End About Section -->
+        let rockets = []; // Array to hold rocket objects
+        let spaceships = []; // Array to hold spaceship objects
 
-  <!-- Contact Section -->
-  <section id="contact">
-    <div class="contact container">
-      <div>
-        <h1 class="section-title">Contact <span>info</span></h1>
-      </div>
-      <div class="contact-items">
-        <div class="contact-item">
-          <div class="icon"><img src="https://img.icons8.com/bubbles/100/000000/phone.png" /></div>
-          <div class="contact-info">
-            <h1>Phone</h1>
-            <h2>+8801718264874</h2>
-            <h2>+8801938401067</h2>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="icon"><img src="https://img.icons8.com/bubbles/100/000000/new-post.png" /></div>
-          <div class="contact-info">
-            <h1>Email</h1>
-            <h2>taushasan.earth@gmail.com</h2>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="icon"><img src="https://img.icons8.com/bubbles/100/000000/map-marker.png" /></div>
-          <div class="contact-info">
-            <h1>Address</h1>
-            <h2>Kushtia, Khulna, Bangladesh</h2>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="icon"><img src="https://www.svgrepo.com/show/56905/social-media-cloud.svg" /></div>
-          <div class="contact-info">
-            <h1>Facebook</h1>
-            <h2>https://www.facebook.com/taus.hasan274</h2>
-          </div>
-        </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- End Contact Section -->
+        /**
+         * Creates a temporary blast effect with expanding and fading particles.
+         */
+        function createBlastEffect() {
+            const blastParticleCount = 500;
+            const blastGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(blastParticleCount * 3);
+            const velocities = new Float32Array(blastParticleCount * 3);
+            const colors = new Float32Array(blastParticleCount * 3);
 
-  <!-- Footer -->
-  <section id="footer">
-    <div class="footer container">
-      <div class="brand">
-        <h1><span>T</span>aus <span>H</span>asan</h1>
-      </div>
-      <h2>We will try to develope.</h2>
-      <div class="social-icon">
-        <div class="social-item">
-          <a href="https://www.facebook.com/taus.hasan274" target="_blank"><img src="https://www.svgrepo.com/show/494273/facebook-round.svg" /></a>
-        </div>
-        <div class="social-item">
-          <a href="mailto:taushasan.earth@gmail.com" target="_blank"><img src="https://www.svgrepo.com/show/353196/mail-with-circle.svg" /></a>
-        </div>
-      </div>
-      <p>Copyright © 2020 CodeWithTaus. All rights reserved</p>
-    </div>
-  </section>
-  <!-- End Footer -->
-  <script src="./app.js"></script>
+            const blastColor1 = new THREE.Color(0xffa500); // Orange
+            const blastColor2 = new THREE.Color(0xff0000); // Red
+
+            for (let i = 0; i < blastParticleCount; i++) {
+                // Start all particles at the center (0,0,0)
+                positions[i * 3] = 0;
+                positions[i * 3 + 1] = 0;
+                positions[i * 3 + 2] = 0;
+
+                // Give them random initial velocities
+                velocities[i * 3] = (Math.random() - 0.5) * 2; // X velocity
+                velocities[i * 3 + 1] = (Math.random() - 0.5) * 2; // Y velocity
+                velocities[i * 3 + 2] = (Math.random() - 0.5) * 2; // Z velocity
+
+                // Assign random color interpolation
+                const mixColor = new THREE.Color();
+                mixColor.lerpColors(blastColor1, blastColor2, Math.random());
+                colors[i * 3] = mixColor.r;
+                colors[i * 3 + 1] = mixColor.g;
+                colors[i * 3 + 2] = mixColor.b;
+            }
+
+            blastGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            blastGeometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+            blastGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const blastMaterial = new THREE.PointsMaterial({
+                size: 0.2, // Initial size of blast particles
+                vertexColors: true,
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                opacity: 1 // Start fully opaque
+            });
+
+            blastParticles = new THREE.Points(blastGeometry, blastMaterial);
+            scene.add(blastParticles);
+            blastStartTime = clock.getElapsedTime(); // Record start time of blast
+        }
+
+        /**
+         * Creates a simple rocket mesh.
+         * @returns {THREE.Group} A group containing the rocket mesh.
+         */
+        function createRocket() {
+            const rocketGroup = new THREE.Group();
+
+            // Body
+            const bodyGeometry = new THREE.CylinderGeometry(0.15, 0.2, 0.8, 8);
+            const bodyMaterial = new THREE.MeshPhongMaterial({ color: 0xcccccc });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.position.y = 0.4;
+            rocketGroup.add(body);
+
+            // Nose Cone
+            const noseGeometry = new THREE.ConeGeometry(0.2, 0.3, 8);
+            const noseMaterial = new THREE.MeshPhongMaterial({ color: 0xff4500 }); // OrangeRed
+            const nose = new THREE.Mesh(noseGeometry, noseMaterial);
+            nose.position.y = 0.8 + 0.15; // Position above body
+            rocketGroup.add(nose);
+
+            // Fins
+            const finMaterial = new THREE.MeshPhongMaterial({ color: 0x808080 }); // Gray
+            const fin1 = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.3, 0.3), finMaterial);
+            fin1.position.set(0, 0.2, 0.2);
+            rocketGroup.add(fin1);
+
+            const fin2 = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.3, 0.3), finMaterial);
+            fin2.position.set(0.2, 0.2, 0);
+            fin2.rotation.y = Math.PI / 2;
+            rocketGroup.add(fin2);
+
+            const fin3 = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.3, 0.3), finMaterial);
+            fin3.position.set(0, 0.2, -0.2);
+            rocketGroup.add(fin3);
+
+            const fin4 = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.3, 0.3), finMaterial);
+            fin4.position.set(-0.2, 0.2, 0);
+            fin4.rotation.y = Math.PI / 2;
+            rocketGroup.add(fin4);
+
+            rocketGroup.scale.set(0.5, 0.5, 0.5); // Scale down the rocket
+            return rocketGroup;
+        }
+
+        /**
+         * Creates a simple spaceship mesh.
+         * @returns {THREE.Group} A group containing the spaceship mesh.
+         */
+        function createSpaceship() {
+            const spaceshipGroup = new THREE.Group();
+
+            // Main body
+            const bodyGeometry = new THREE.BoxGeometry(0.8, 0.2, 0.4);
+            const bodyMaterial = new THREE.MeshPhongMaterial({ color: 0x6a5acd }); // SlateBlue
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            spaceshipGroup.add(body);
+
+            // Wings
+            const wingGeometry = new THREE.BoxGeometry(0.2, 0.05, 1.0);
+            const wingMaterial = new THREE.MeshPhongMaterial({ color: 0x4682b4 }); // SteelBlue
+            const wingLeft = new THREE.Mesh(wingGeometry, wingMaterial);
+            wingLeft.position.set(-0.5, 0, 0);
+            spaceshipGroup.add(wingLeft);
+
+            const wingRight = new THREE.Mesh(wingGeometry, wingMaterial);
+            wingRight.position.set(0.5, 0, 0);
+            spaceshipGroup.add(wingRight);
+
+            // Cockpit
+            const cockpitGeometry = new THREE.SphereGeometry(0.15, 16, 16);
+            const cockpitMaterial = new THREE.MeshPhongMaterial({ color: 0xadd8e6 }); // LightBlue
+            const cockpit = new THREE.Mesh(cockpitGeometry, cockpitMaterial);
+            cockpit.position.set(0, 0.15, 0);
+            spaceshipGroup.add(cockpit);
+
+            spaceshipGroup.scale.set(0.5, 0.5, 0.5); // Scale down the spaceship
+            return spaceshipGroup;
+        }
+
+        /**
+         * Initializes the Three.js scene, camera, renderer, and objects.
+         */
+        function init() {
+            // Get the canvas element
+            const canvas = document.getElementById('webgl-canvas');
+
+            // 1. Scene: The container for all 3D objects, lights, and cameras
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0d1117); // Dark background for the scene
+
+            // 2. Camera: Defines what is visible in the scene and from what perspective
+            // PerspectiveCamera( fov, aspect, near, far )
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 0, 20); // Start camera further back for intro animation
+
+            // 3. Renderer: Renders the scene onto the canvas
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio); // Adjust for high DPI screens
+            document.body.appendChild(renderer.domElement); // Add renderer's canvas to the DOM
+
+            // 4. Lights: Illuminate the scene
+            // AmbientLight: Lights all objects in the scene equally from all directions
+            const ambientLight = new THREE.AmbientLight(0x404040, 2); // Soft white light, increased intensity
+            scene.add(ambientLight);
+
+            // DirectionalLight: Simulates sunlight - rays are parallel
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5); // White light, increased intensity
+            directionalLight.position.set(1, 1, 1).normalize(); // Position the light
+            scene.add(directionalLight);
+
+            // 5. OrbitControls: Initialize but disable during intro animation
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true; // Enable smooth camera movement
+            controls.dampingFactor = 0.05; // Damping factor
+            controls.screenSpacePanning = false; // Disable panning in screen space
+            controls.minDistance = 2; // Minimum zoom distance
+            controls.maxDistance = 10; // Maximum zoom distance
+            controls.autoRotate = true; // Enable auto-rotation
+            controls.autoRotateSpeed = 0.5; // Speed of auto-rotation
+            controls.enabled = false; // Disable controls initially
+
+            // 6. Create the Earth sphere
+            const earthGeometry = new THREE.SphereGeometry(1.5, 64, 64); // SphereGeometry(radius, widthSegments, heightSegments)
+            // Use a MeshPhongMaterial for a more distinct Earth appearance
+            const earthMaterial = new THREE.MeshPhongMaterial({
+                color: 0x0055aa, // Darker blue for oceans
+                specular: 0x228b22, // Greenish specular highlight for landmasses
+                shininess: 30, // Moderate shininess
+                flatShading: false // Smooth shading
+            });
+            earthSphere = new THREE.Mesh(earthGeometry, earthMaterial);
+            scene.add(earthSphere);
+
+            // 7. Create the Clouds sphere (slightly larger and transparent)
+            const cloudsGeometry = new THREE.SphereGeometry(1.52, 64, 64); // Slightly larger radius
+            const cloudsMaterial = new THREE.MeshPhongMaterial({
+                color: 0xffffff, // White for clouds
+                transparent: true,
+                opacity: 0.4, // Semi-transparent
+                blending: THREE.AdditiveBlending, // Additive blending for cloud effect
+                flatShading: false // Smooth shading
+            });
+            cloudsSphere = new THREE.Mesh(cloudsGeometry, cloudsMaterial);
+            scene.add(cloudsSphere);
+
+
+            // 8. Create a particle background
+            const particleCount = 2000; // Increased particle count for a denser effect
+            const particlesGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+
+            const color1 = new THREE.Color(0x00ffff); // Cyan
+            const color2 = new THREE.Color(0xff00ff); // Magenta
+
+            for (let i = 0; i < particleCount; i++) {
+                // Position particles randomly in a larger sphere
+                const x = (Math.random() - 0.5) * 30;
+                const y = (Math.random() - 0.5) * 30;
+                const z = (Math.random() - 0.5) * 30;
+                positions[i * 3] = x;
+                positions[i * 3 + 1] = y;
+                positions[i * 3 + 2] = z;
+
+                // Assign random color interpolation
+                const mixColor = new THREE.Color();
+                mixColor.lerpColors(color1, color2, Math.random());
+                colors[i * 3] = mixColor.r;
+                colors[i * 3 + 1] = mixColor.g;
+                colors[i * 3 + 2] = mixColor.b;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.08, // Increased size of particles
+                vertexColors: true, // Use vertex colors
+                blending: THREE.AdditiveBlending, // Additive blending for glow effect
+                transparent: true,
+                opacity: 0.9 // Slightly higher opacity
+            });
+
+            particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particles);
+
+            // 9. Post-processing setup for bloom effect
+            composer = new THREE.EffectComposer(renderer);
+            const renderPass = new THREE.RenderPass(scene, camera);
+            composer.addPass(renderPass);
+
+            // UnrealBloomPass parameters: strength, radius, threshold
+            const bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85); // Increased strength
+            composer.addPass(bloomPass);
+
+            const outputPass = new THREE.ShaderPass(THREE.CopyShader);
+            outputPass.renderToScreen = true;
+            composer.addPass(outputPass);
+
+
+            // Handle window resizing
+            window.addEventListener('resize', onWindowResize, false);
+
+            // Trigger the blast effect immediately after scene setup
+            createBlastEffect();
+
+            // Create and add rockets
+            for (let i = 0; i < 3; i++) { // Create 3 rockets
+                const rocket = createRocket();
+                rocket.position.set(
+                    (Math.random() - 0.5) * 40, // Random X
+                    (Math.random() - 0.5) * 40, // Random Y
+                    (Math.random() - 0.5) * 40 // Random Z
+                );
+                rocket.rotation.y = Math.random() * Math.PI * 2; // Random initial rotation
+                rocket.userData.speed = 0.1 + Math.random() * 0.1; // Random speed
+                scene.add(rocket);
+                rockets.push(rocket);
+            }
+
+            // Create and add spaceships (increased count to 5)
+            for (let i = 0; i < 5; i++) { // Create 5 spaceships
+                const spaceship = createSpaceship();
+                spaceship.position.set(
+                    (Math.random() - 0.5) * 40, // Random X
+                    (Math.random() - 0.5) * 40, // Random Y
+                    (Math.random() - 0.5) * 40 // Random Z
+                );
+                spaceship.rotation.y = Math.random() * Math.PI * 2; // Random initial rotation
+                spaceship.userData.speed = 0.08 + Math.random() * 0.08; // Random speed
+                scene.add(spaceship);
+                spaceships.push(spaceship);
+            }
+        }
+
+        /**
+         * Handles window resize events to adjust camera aspect and renderer size.
+         */
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix(); // Update camera's projection matrix
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            composer.setSize(window.innerWidth, window.innerHeight); // Update composer size
+        }
+
+        /**
+         * Animation loop: Updates controls, rotates objects, and renders the scene.
+         */
+        function animate() {
+            requestAnimationFrame(animate); // Request the next frame
+
+            const delta = clock.getDelta(); // Get time elapsed since last frame
+            const elapsedTime = clock.getElapsedTime();
+
+            // Update blast particles
+            if (blastParticles) {
+                const blastProgress = (elapsedTime - blastStartTime) / blastDuration;
+                if (blastProgress < 1) {
+                    const positions = blastParticles.geometry.attributes.position.array;
+                    const velocities = blastParticles.geometry.attributes.velocity.array;
+                    const material = blastParticles.material;
+
+                    // Update positions based on velocity
+                    for (let i = 0; i < positions.length; i += 3) {
+                        positions[i] += velocities[i] * delta * 5; // Scale velocity for faster expansion
+                        positions[i + 1] += velocities[i + 1] * delta * 5;
+                        positions[i + 2] += velocities[i + 2] * delta * 5;
+                    }
+                    blastParticles.geometry.attributes.position.needsUpdate = true;
+
+                    // Fade out particles
+                    material.opacity = 1 - blastProgress;
+                    material.size = 0.2 + blastProgress * 0.5; // Grow particles slightly
+                } else {
+                    // Remove blast particles after animation
+                    scene.remove(blastParticles);
+                    blastParticles.geometry.dispose();
+                    blastParticles.material.dispose();
+                    blastParticles = null;
+                }
+            }
+
+
+            if (introAnimationPlaying) {
+                // Intro camera animation
+                const targetZ = 5;
+                const startZ = 20;
+                const progress = Math.min(1, elapsedTime / introAnimationDuration);
+
+                // Lerp camera position
+                camera.position.z = startZ + (targetZ - startZ) * progress;
+
+                // Optional: Make camera look at the object during intro
+                camera.lookAt(earthSphere.position); // Look at the Earth sphere
+
+                if (progress >= 1) {
+                    introAnimationPlaying = false;
+                    controls.enabled = true; // Enable OrbitControls after intro
+                    document.getElementById('info-overlay').classList.add('show'); // Show info overlay
+                }
+            } else {
+                controls.update(); // Update OrbitControls only when intro is done
+            }
+
+
+            // Rotate the Earth sphere
+            if (earthSphere) {
+                earthSphere.rotation.y += 0.003; // Slower rotation for Earth
+            }
+
+            // Rotate the clouds sphere slightly faster or slower than Earth
+            if (cloudsSphere) {
+                cloudsSphere.rotation.y += 0.004; // Slightly faster rotation for clouds
+            }
+
+            // Subtle pulsating scale animation for the main Earth object
+            if (earthSphere) {
+                const scale = 1 + Math.sin(elapsedTime * 2) * 0.02; // Oscillates between 0.98 and 1.02
+                earthSphere.scale.set(scale, scale, scale);
+            }
+
+
+            // Rotate particles slightly for a dynamic effect
+            if (particles) {
+                particles.rotation.y += 0.0005;
+                particles.rotation.x += 0.0002;
+
+                // Add a subtle vertical drift to particles
+                const positions = particles.geometry.attributes.position.array;
+                for (let i = 0; i < positions.length; i += 3) {
+                    positions[i + 1] += Math.sin(elapsedTime * 0.5 + i) * 0.0001; // Slight vertical movement
+                }
+                particles.geometry.attributes.position.needsUpdate = true; // Mark as needing update
+            }
+
+            // Animate rockets
+            rockets.forEach(rocket => {
+                // Move rocket along its local Z-axis (forward)
+                rocket.translateZ(rocket.userData.speed * delta * 10); // Adjust speed multiplier as needed
+
+                // If rocket goes too far, reset its position
+                if (rocket.position.length() > 30) { // If distance from origin is too great
+                    rocket.position.set(
+                        (Math.random() - 0.5) * 40,
+                        (Math.random() - 0.5) * 40,
+                        (Math.random() - 0.5) * 40
+                    );
+                    rocket.rotation.y = Math.random() * Math.PI * 2; // New random direction
+                    rocket.rotation.x = (Math.random() - 0.5) * Math.PI / 4; // Slight pitch
+                }
+            });
+
+            // Animate spaceships
+            spaceships.forEach(spaceship => {
+                // Move spaceship along its local Z-axis (forward)
+                spaceship.translateZ(spaceship.userData.speed * delta * 10); // Adjust speed multiplier as needed
+
+                // If spaceship goes too far, reset its position
+                if (spaceship.position.length() > 30) { // If distance from origin is too great
+                    spaceship.position.set(
+                        (Math.random() - 0.5) * 40,
+                        (Math.random() - 0.5) * 40,
+                        (Math.random() - 0.5) * 40
+                    );
+                    spaceship.rotation.y = Math.random() * Math.PI * 2; // New random direction
+                    spaceship.rotation.x = (Math.random() - 0.5) * Math.PI / 4; // Slight pitch
+                }
+            });
+
+
+            // Render the scene using the EffectComposer for post-processing
+            composer.render();
+        }
+
+        // Start the animation and initialization when the window loads
+        window.onload = function () {
+            init();
+            animate();
+        };
+    </script>
 </body>
-
 </html>
